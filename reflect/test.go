@@ -5,10 +5,14 @@ import (
 )
 
 func init() {
-	run.Register("refelct", Run)
+	run.Register("reflect", Run)
 }
 
 func Run() {
 	// test()
-	testChan()
+	//testChan()
+
+	testFunc()
+
+	testInterface()
 }
