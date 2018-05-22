@@ -1,0 +1,17 @@
+syntax = "proto3";
+package inf;  // 包名 
+
+// 请求 
+message DataReq {
+    int32 id = 1;
+}
+
+// 响应 
+message DataRsp {
+    string name = 1;
+}
+
+// 服务 
+service Data {
+    rpc GetData(DataReq) returns (DataRsp);
+}
