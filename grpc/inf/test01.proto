@@ -9,9 +9,15 @@ message DataReq {
 // 响应 
 message DataRsp {
     string name = 1;
+    int64  times = 2;
+}
+
+message Data2Rsp {
+    string resp = 1;
 }
 
 // 服务 
 service Data {
     rpc GetData(DataReq) returns (DataRsp);
+    rpc GetString(DataReq) returns (Data2Rsp);
 }
