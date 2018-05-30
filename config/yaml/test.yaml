@@ -1,0 +1,14 @@
+id: 12345678
+name: test-file
+product:
+  - productId: 0001
+    desc: test-product-001
+    quantity: 100000
+    price: 230
+  - productId: 0002
+    desc: test-product-002
+    quantity: 80000
+    price: 450 
+address: 
+  Shenzhen 1101 KejiYuan.
+  Guangdong, China
