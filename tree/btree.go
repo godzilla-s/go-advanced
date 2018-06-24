@@ -1,100 +1,62 @@
+// B 树
 package tree
 
 import "fmt"
 
-// 二叉树
-type node struct {
-	parent *node
-	left   *node
-	right  *node
-	val    int
+type Btree struct {
+	m      int      // 阶数
+	num    int      // 个数 : max(num) = m - 1
+	key    []int    // 值
+	parent *Btree   // 指向父亲的节点
+	child  []*Btree // 子节点
 }
 
-func newNode(val int) *node {
-	return &node{
-		val: val,
+func New(m int) *Btree {
+	return &Btree{
+		m:     m,
+		key:   make([]int, m), // 留一个做备用
+		child: make([]*Btree, m),
 	}
 }
 
-type BiTree struct {
-	root *node
-}
-
-func (b *BiTree) Value() int {
-	return b.root.val
-}
-
-func (b *BiTree) Add(val int) {
-	if b.root == nil {
-		b.root = newNode(val)
-		return
-	}
-
-	node := b.root
-	//fmt.Println(node.val, val)
-	for node != nil {
-		//fmt.Println(node.val)
-		if val == node.val {
-			//fmt.Println("repeat", node.val, val)
-			return
-		}
-
-		if val < node.val {
-			if node.left == nil {
-				node.left = newNode(val)
-				return
-			} else {
-				node = node.left
-			}
-		} else {
-			if node.right == nil {
-				node.right = newNode(val)
-				return
-			} else {
-				node = node.right
+func (b *Btree) Add(val int) {
+	n := b
+	i := 0
+	//parent := b.parent
+	for {
+		for i = 0; i < n.num; i++ {
+			if val < b.key[i] {
+				//copy(b.key[i+1:], b.key[i:])
+				// n = n.child[i]
+				break
 			}
 		}
+		if n.child[i] == nil {
+			break
+		}
+		n = n.child[i]
+	}
+
+	copy(n.key[i+1:], n.key[i:])
+	n.key[i] = val
+	fmt.Println(n.key)
+	n.num++
+	if n.num == n.m {
+		// 分裂
+		fmt.Println("split")
+		idx := n.num / 2
+		b.split(idx)
 	}
 }
 
-// 前序: 先访问根结点，再先序遍历左子树，最后再先序遍历右子树
-func (n *node) printPreOrder() {
-	if n != nil {
-		fmt.Printf("%d,", n.val)
-		n.left.printPreOrder()
-		n.right.printPreOrder()
+// 分裂
+func (b *Btree) split(idx int) {
+	p := New(b.m)
+	copy(p.key, b.key[idx:])
+	p.num = len(p.key)
+	if b.parent == nil {
+		node := New(b.m)
+		node.key[0] = b.key[idx]
+
 	}
-}
-
-// 后续: 先后序遍历左子树，然后再后序遍历右子树，最后再访问根结点
-func (n *node) printPostOrder() {
-	if n != nil {
-		n.left.printPostOrder()
-		n.right.printPostOrder()
-		fmt.Printf("%d,", n.val)
-	}
-}
-
-// 中序
-func (n *node) printMidOrder() {
-	if n != nil {
-		n.left.printMidOrder()
-		fmt.Printf("%d,", n.val)
-		n.right.printMidOrder()
-	}
-}
-
-func (b *BiTree) PrintPreOrder() {
-	b.root.printPreOrder()
-	println()
-}
-
-func (b *BiTree) PrintPostOrder() {
-	b.root.printPostOrder()
-	println()
-}
-
-func (b *BiTree) PrintMidOrder() {
-	b.root.printMidOrder()
-	println()
 }

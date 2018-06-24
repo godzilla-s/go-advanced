@@ -8,13 +8,22 @@ import (
 )
 
 func main() {
-	BiTree()
+	BTree()
+}
+
+func BTree() {
+	root := tree.New(3)
+	root.Add(46)
+	root.Add(11)
+	root.Add(14)
+	root.Add(9)
 }
 
 func BiTree() {
 	var root tree.BiTree
 	rand.Seed(time.Now().Unix())
-	for i := 0; i < 10; i++ {
+
+	for i := 0; i < 20; i++ {
 		v := rand.Int() % 100
 		fmt.Printf("%d,", v)
 		root.Add(v)
