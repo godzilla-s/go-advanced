@@ -3,6 +3,7 @@ package network
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net"
 	"time"
 )
@@ -24,8 +25,10 @@ func Server(addr string) {
 		if err != nil {
 			continue
 		}
+		fmt.Println("new client")
 		//go handleConn2(conn)
-		go heartbeat(conn)
+		//go heartbeat(conn)
+		go handle(conn)
 	}
 }
 
@@ -41,6 +44,22 @@ func handleConn(c *net.TCPConn) {
 
 	fmt.Println(buf[:n])
 	return
+}
+
+func handle(fd *net.TCPConn) {
+	defer fd.Close()
+	for {
+		data, err := ioutil.ReadAll(fd)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if len(data) == 0 {
+			fmt.Println("empty")
+			return
+		}
+		fmt.Println(data)
+	}
 }
 
 func handleConn2(c *net.TCPConn) {

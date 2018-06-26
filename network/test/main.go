@@ -18,7 +18,7 @@ func main() {
 	flag.StringVar(&mode, "m", "", "server or client")
 	flag.Parse()
 
-	if port == 0 || mode == "" || typ == 0 {
+	if port == 0 || mode == "" {
 		panic("invalid argument")
 	}
 
