@@ -19,22 +19,22 @@ func Client(addr string) {
 		return
 	}
 
-	//handleWrite(c)
+	handleWrite(c)
 	//handleRead(c)
-	clientHeartbeat(c)
+	//clientHeartbeat(c)
 }
 
-func handleWrite(c *net.TCPConn) {
+func handleWrite(fd *net.TCPConn) {
 	for {
-		time.Sleep(5 * time.Second)
+		time.Sleep(2 * time.Second)
 
-		n, err := c.Write([]byte("abcdefghijk"))
+		_, err := fd.Write([]byte("abcdefghijk"))
 		if err != nil {
 			fmt.Println("write:", err)
 			continue
 		}
-		fmt.Println("write:", n)
-		c.CloseWrite() // 关闭写端口
+		//fmt.Println("write:", n)
+		//c.CloseWrite() // 关闭写端口
 	}
 }
 
