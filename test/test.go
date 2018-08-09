@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
+	"runtime"
 )
 
 type People interface {
@@ -33,6 +35,57 @@ const (
 	Jujube
 )
 
+func test1() {
+	a := 1
+	b := 2
+	defer calc("1", a, calc("10", a, b))
+	a = 0
+	defer calc("2", a, calc("20", a, b))
+	b = 1
+}
+
+func calc(index string, a, b int) int {
+	ret := a + b
+	fmt.Println(index, a, b, ret)
+	return ret
+}
+
+// 有可能发生异常
+func select_rand() {
+	runtime.GOMAXPROCS(1)
+	int_chan := make(chan int, 1)
+	string_chan := make(chan string, 1)
+	int_chan <- 1
+	string_chan <- "hello"
+	select {
+	case value := <-int_chan:
+		fmt.Println(value)
+	case value := <-string_chan:
+		panic(value)
+	}
+}
+
+type People2 interface {
+	Show()
+}
+
+type Student2 struct{}
+
+func (stu *Student2) Show() {}
+
+func live() People2 {
+	var stu *Student2
+	return stu
+}
+
+func fileabs() {
+	abspath, err := filepath.Abs("./docker-compose/crypto-config")
+	if err != nil {
+		fmt.Println("abs path error:", err)
+		return
+	}
+	fmt.Println("abs path:", abspath)
+}
 func main() {
 	//var p People = &Student{}
 	//fmt.Println(p.Speak("hello"))
@@ -44,7 +97,11 @@ func main() {
 	// fmt.Println("%x", x)
 
 	// 或运算的包含使用
-	x := Apple | Peach | Banana
-	fmt.Println(x)
-	fmt.Println(x|Jujube == x, x|Apple == x, x|Peach == x, x|Banana == x)
+	//x := Apple | Peach | Banana
+	//fmt.Println(x)
+	//fmt.Println(x|Jujube == x, x|Apple == x, x|Peach == x, x|Banana == x)
+	//test1()
+	// select_rand()
+
+	fileabs()
 }
