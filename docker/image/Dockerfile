@@ -1,9 +1,9 @@
-FROM go1.10.3-alpine as builder
+FROM golang:1.10.3-alpine
 
-Add . /myapp
+ADD . /myapp
 
 WORKDIR /myapp
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o httpserver http.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o httpserver httpserver.go
 
 CMD ["./httpserver"]

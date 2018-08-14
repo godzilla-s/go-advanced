@@ -2,11 +2,11 @@ version: '3'
 
 services:
   web:
-    container_name: http_server
-    image: myapp/httpserver
-    #environment:
-    #  - ASPNETCORE_ENVIRONMENT=Development
+    container_name: httpserver2
+    image: myapp/httpserver:1.0.0
     ports:
-      - "8010:8010"
+      - "8020:8010"
+    working_dir: /myapp
     volumes:
-      - .:/mycode
+      - .:/myapp/
+    command: httpserver

@@ -22,6 +22,9 @@ func New(fd string) *DockerClient {
 		panic(err)
 	}
 
+	//var opt docker.BuildImageOptions
+
+	//cli.BuildImage()
 	return &DockerClient{
 		cli:        cli,
 		containers: make(ContainerSet),
@@ -131,4 +134,12 @@ func (dc *DockerClient) Containers() ([]docker.APIContainers, error) {
 	var opt docker.ListContainersOptions
 	opt.All = true
 	return dc.cli.ListContainers(opt)
+}
+
+func (dc *DockerClient) BuildImage() {
+	var opt docker.BuildImageOptions
+
+	opt.Dockerfile = ""
+	opt.Name = ""
+	dc.cli.BuildImage(opt)
 }
