@@ -1,11 +1,10 @@
-package crypto
+package ecc
 
 import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
 	"errors"
-	"fmt"
 	"math/big"
 )
 
@@ -42,16 +41,4 @@ func (id PublicID) PublicKey() (*ecdsa.PublicKey, error) {
 		return nil, errors.New("id is invalid curve point")
 	}
 	return puk, nil
-}
-
-// 测试
-func Run() {
-	prk, _ := GenerateKey()
-
-	pukId := PubkeyID(prk)
-
-	_, err := pukId.PublicKey()
-	if err != nil {
-		fmt.Println(err)
-	}
 }

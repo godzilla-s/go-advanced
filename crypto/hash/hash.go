@@ -1,4 +1,4 @@
-package crypto
+package main
 
 import "crypto/sha256"
 
@@ -12,4 +12,8 @@ func toHash(data []byte) Hash {
 	var hash Hash
 	copy(hash[:], h[:])
 	return hash
+}
+
+func main() {
+
 }

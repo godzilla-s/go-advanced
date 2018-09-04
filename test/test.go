@@ -1,9 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"net"
 	"path/filepath"
 	"runtime"
+	"time"
 )
 
 type People interface {
@@ -86,6 +91,42 @@ func fileabs() {
 	}
 	fmt.Println("abs path:", abspath)
 }
+
+func run() {
+	lsn, err := net.Listen("tcp4", ":5566")
+	if err != nil {
+		panic(err)
+	}
+	defer lsn.Close()
+	log.Println("listen up ...")
+	for {
+		c, err := lsn.Accept()
+		if err != nil {
+			log.Println("listen:", err)
+			return
+		}
+
+		go func() {
+			buffer := make([]byte, 1028)
+			defer c.Close()
+			for {
+				n, err := c.Read(buffer)
+				if err != nil && err != io.EOF {
+					return
+				}
+				if err == io.EOF {
+					continue
+				}
+
+				fmt.Println(string(buffer[:n]))
+				time.Sleep(3 * time.Second)
+				c.Write([]byte("OK"))
+				return
+			}
+
+		}()
+	}
+}
 func main() {
 	//var p People = &Student{}
 	//fmt.Println(p.Speak("hello"))
@@ -103,7 +144,37 @@ func main() {
 	//test1()
 	// select_rand()
 
-	fileabs()
+	//fileabs()
+	//run()
+
+	// a := "./chaincode/peer/code-001.out"
+	// splits := strings.Split(a, "/")
+	// splits[len(splits)-1] = "signed-" + splits[len(splits)-1]
+	// fmt.Println(strings.Join(splits, "/"))
+
+	// b := "OR(\"Org1MSP.member\",\"Org2MSP.member\")"
+	// nb := strings.Replace(b, "\"", "'", 10)
+	// fmt.Println(b, nb)
+
+	var c [][]byte
+	a := []byte("fsdgs")
+	c = append(c, a)
+	c = append(c, []byte("thfgr"))
+	c = append(c, []byte("ujkil"))
+	fmt.Println(c)
+	out, err := json.Marshal(&c)
+	if err != nil {
+		fmt.Println("marshal:", err)
+		return
+	}
+	fmt.Println(out)
+	var d [][]byte
+	err = json.Unmarshal(out, &d)
+	if err != nil {
+		fmt.Println("unmarshal:", err)
+		return
+	}
+	fmt.Println(d)
 }
 
 //./peer.sh chaincode instantiate -o orderer.example.com:7050 --tls true --cafile ./tlsca.example.com-cert.pem -C mychannel -n demo -v 0.0.1 -c '{"Args":["init"]}' -P "OR('Org1MSP.member','Org2MSP.member')"
